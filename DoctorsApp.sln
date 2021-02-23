@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artem.Doctors.Api", "Artem.Doctors.Api\Artem.Doctors.Api.csproj", "{65BD0A10-DC98-4B17-9AC0-4BDAE3BF1D1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artem.Doctors.Data", "Artem.Doctors.Data\Artem.Doctors.Data.csproj", "{15F9CFFB-16C3-49B3-8732-101129274CAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{65BD0A10-DC98-4B17-9AC0-4BDAE3BF1D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65BD0A10-DC98-4B17-9AC0-4BDAE3BF1D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65BD0A10-DC98-4B17-9AC0-4BDAE3BF1D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F9CFFB-16C3-49B3-8732-101129274CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F9CFFB-16C3-49B3-8732-101129274CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F9CFFB-16C3-49B3-8732-101129274CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F9CFFB-16C3-49B3-8732-101129274CAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
