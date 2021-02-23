@@ -34,6 +34,7 @@ namespace Artem.Doctors.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorsDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DoctorsDb")));
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,15 +45,8 @@ namespace Artem.Doctors.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
+            app.UseRouting()
+               .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
