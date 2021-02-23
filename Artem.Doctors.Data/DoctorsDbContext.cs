@@ -7,5 +7,6 @@ namespace Artem.Doctors.Data
 {
     public class DoctorsDbContext : DbContext
     {
+        public DoctorsDbContext(DbContextOptions<DoctorsDbContext> options) : base(options) { }
     }
 }
