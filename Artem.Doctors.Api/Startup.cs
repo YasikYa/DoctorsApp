@@ -34,6 +34,7 @@ namespace Artem.Doctors.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorsDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DoctorsDb")));
+            services.AddSwaggerDocument();
             services.AddControllers();
         }
 
@@ -45,7 +46,9 @@ namespace Artem.Doctors.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting()
+            app.UseOpenApi()
+               .UseSwaggerUi3()
+               .UseRouting()
                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
