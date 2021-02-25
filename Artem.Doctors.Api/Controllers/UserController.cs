@@ -1,6 +1,8 @@
 ﻿using Artem.Doctors.Api.Authorization;
 using Artem.Doctors.Api.ConfigurationModels;
 using Artem.Doctors.Data;
+using Artem.Doctors.Data.DTOs;
+using Artem.Doctors.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +27,7 @@ namespace Artem.Doctors.Api.Controllers
         public UserController(IConfiguration configuration, DoctorsDbContext context) => (_configuration, _context) = (configuration, context);
 
         [HttpGet("token")]
-        public ActionResult<string> Get(string email, string password)
+        public ActionResult Get(string email, string password)
         {
             var user = _context.Users.Where(u => u.Email == email).FirstOrDefault();
             if (user == null || user.Password != password)
@@ -34,6 +36,27 @@ namespace Artem.Doctors.Api.Controllers
             var jwtConfig = _configuration.GetSection("JWT").Get<JWTConfig>();
             var tokenJson = JWTHelper.CreateTokenJson(user, jwtConfig);
             return Ok(new { access_token = tokenJson });
+        }
+
+        [HttpPost]
+        public ActionResult<UserCreateDto> Create(UserCreateDto model)
+        {
+            if (_context.Users.Where(u => u.Email == model.Email).Any())
+                return BadRequest();
+
+            var patient = new Patient
+            {
+                Identity = new User
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                    Role = UserRole.Patient
+                }
+            };
+            _context.Patients.Add(patient);
+            _context.SaveChanges();
+
+            return Ok(new UserDto { Id = patient.Id, Email = patient.Identity.Email });
         }
     }
 }
