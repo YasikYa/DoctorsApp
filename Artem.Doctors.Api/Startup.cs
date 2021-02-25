@@ -1,4 +1,7 @@
+using Artem.Doctors.Api.Authorization;
+using Artem.Doctors.Api.ConfigurationModels;
 using Artem.Doctors.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +40,35 @@ namespace Artem.Doctors.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorsDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DoctorsDb")));
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(config => 
+            {
+                config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT"));
+                config.AddSecurity("JWT", new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Name = "Authorization",
+                    Description = "Bearer {access_token}"
+                });
+            });
             services.AddControllers();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+                {
+                    var jwtConfig = _configuration.GetSection("JWT").Get<JWTConfig>();
+                    var signInKey = JWTHelper.CreateTokenSignInKey(jwtConfig.TokenSecurityKey);
+
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidAudience = jwtConfig.Audience,
+                        ValidIssuer = jwtConfig.Issuer,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        IssuerSigningKey = signInKey
+                    };
+                });
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +82,8 @@ namespace Artem.Doctors.Api
             app.UseOpenApi()
                .UseSwaggerUi3()
                .UseRouting()
+               .UseAuthentication()
+               .UseAuthorization()
                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
