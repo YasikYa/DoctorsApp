@@ -69,6 +69,16 @@ namespace Artem.Doctors.Api
                     };
                 });
             services.AddAuthorization();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                          .AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,6 +92,7 @@ namespace Artem.Doctors.Api
             app.UseOpenApi()
                .UseSwaggerUi3()
                .UseRouting()
+               .UseCors()
                .UseAuthentication()
                .UseAuthorization()
                .UseEndpoints(endpoints => endpoints.MapControllers());
