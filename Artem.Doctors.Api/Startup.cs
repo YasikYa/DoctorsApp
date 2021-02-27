@@ -14,6 +14,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,6 +54,7 @@ namespace Artem.Doctors.Api
             });
             services.AddControllers();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
                 {
