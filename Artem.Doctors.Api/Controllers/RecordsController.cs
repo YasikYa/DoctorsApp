@@ -22,7 +22,7 @@ namespace Artem.Doctors.Api.Controllers
         public RecordsController(DoctorsDbContext context) => _context = context;
 
         [HttpGet("doctor/{id}")]
-        public ActionResult<RecordDto> GetAll([FromRoute]Guid doctorId)
+        public ActionResult<IEnumerable<RecordDto>> GetAll([FromRoute]Guid doctorId)
         {
             return Ok(_context.Records.Where(r => r.DoctorId == doctorId).Select(r => new RecordDto
             {
@@ -46,7 +46,7 @@ namespace Artem.Doctors.Api.Controllers
                 return Forbid();
 
             // Verify record can be scheduled and has no conflicts with other records
-            var timeOverlap = _context.Records.Where(r => (model.From >= r.From && model.From <= r.To) || (model.To >= r.From && model.To <= r.To)).Any();
+            var timeOverlap = _context.Records.Where(r => r.DoctorId == model.DoctorId && ((model.From >= r.From && model.From <= r.To) || (model.To >= r.From && model.To <= r.To))).Any();
             if (timeOverlap)
                 return BadRequest();
 
