@@ -1,5 +1,7 @@
 ﻿using Artem.Doctors.Data;
 using Artem.Doctors.Data.DTOs;
+using Artem.Doctors.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +54,7 @@ namespace Artem.Doctors.Api.Controllers
             });
         }
 
+        [Authorize(Roles = nameof(UserRole.Admin))]
         [HttpPost]
         public IActionResult Create(DoctorCreateDto model)
         {
@@ -59,7 +62,7 @@ namespace Artem.Doctors.Api.Controllers
             if (identityExists)
                 return BadRequest("Doctor exists");
 
-            var doctor = new Data.Models.Doctor
+            var doctor = new Doctor
             {
 
                 ContactPhone = model.ContactPhone,
@@ -87,6 +90,7 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(doctor.Id);
         }
 
+        [Authorize(Roles = nameof(UserRole.Admin))]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] Guid id)
         {

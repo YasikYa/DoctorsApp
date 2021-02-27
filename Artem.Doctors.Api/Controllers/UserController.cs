@@ -2,6 +2,7 @@
 using Artem.Doctors.Api.ConfigurationModels;
 using Artem.Doctors.Data;
 using Artem.Doctors.Data.DTOs;
+using Artem.Doctors.Data.DTOs.UserDTOs;
 using Artem.Doctors.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,11 @@ namespace Artem.Doctors.Api.Controllers
 
         public UserController(IConfiguration configuration, DoctorsDbContext context) => (_configuration, _context) = (configuration, context);
 
-        [HttpGet("token")]
-        public ActionResult Get(string email, string password)
+        [HttpPost("token")]
+        public ActionResult Get(LoginDto model)
         {
-            var user = _context.Users.Where(u => u.Email == email).FirstOrDefault();
-            if (user == null || user.Password != password)
+            var user = _context.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+            if (user == null || user.Password != model.Password)
                 return BadRequest();
 
             var jwtConfig = _configuration.GetSection("JWT").Get<JWTConfig>();
