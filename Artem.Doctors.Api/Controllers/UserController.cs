@@ -48,6 +48,9 @@ namespace Artem.Doctors.Api.Controllers
             {
                 Identity = new User
                 {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth,
                     Email = model.Email,
                     Password = model.Password,
                     Role = UserRole.Patient
@@ -56,7 +59,7 @@ namespace Artem.Doctors.Api.Controllers
             _context.Patients.Add(patient);
             _context.SaveChanges();
 
-            return Ok(new UserDto { Id = patient.Id, Email = patient.Identity.Email });
+            return Ok(new UserDto { Id = patient.Id, Email = patient.Identity.Email, FullName = $"{patient.Identity.FirstName} {patient.Identity.LastName}" });
         }
     }
 }
