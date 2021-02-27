@@ -24,10 +24,11 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(_context.Doctors.Select(d => new DoctorDto
             {
                 Id = d.Id,
-                FirstName = d.FirstName,
-                LastName = d.LastName,
-                DateOfBirth = d.DateOfBirth,
-                Address = d.Address
+                FirstName = d.Identity.FirstName,
+                LastName = d.Identity.LastName,
+                DateOfBirth = d.Identity.DateOfBirth,
+                ContactPhone = d.ContactPhone,
+                ConsultPrice = d.ConsultPrice
             }).ToList());
         }
 
@@ -41,10 +42,11 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(new DoctorDetailsDto
             {
                 Id = doctor.Id,
-                FirstName = doctor.FirstName,
-                LastName = doctor.LastName,
-                DateOfBirth = doctor.DateOfBirth,
-                Address = doctor.Address,
+                FirstName = doctor.Identity.FirstName,
+                LastName = doctor.Identity.LastName,
+                DateOfBirth = doctor.Identity.DateOfBirth,
+                ContactPhone = doctor.ContactPhone,
+                ConsultPrice = doctor.ConsultPrice,
                 Email = doctor.Identity.Email,
                 Specialties = doctor.Specialties.Select(s => new SpecialtyDto { Id = s.Id, Name = s.Name })
             });
@@ -59,15 +61,17 @@ namespace Artem.Doctors.Api.Controllers
 
             var doctor = new Data.Models.Doctor
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.Address,
-                DateOfBirth = model.DateOfBirth,
+
+                ContactPhone = model.ContactPhone,
+                ConsultPrice = model.ConsultPrice,
                 Identity = new Data.Models.User
                 {
                     Email = model.Email,
                     Password = model.Password,
-                    Role = Data.Models.UserRole.Doctor
+                    Role = Data.Models.UserRole.Doctor,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth,
                 }
             };
             _context.Doctors.Add(doctor);
