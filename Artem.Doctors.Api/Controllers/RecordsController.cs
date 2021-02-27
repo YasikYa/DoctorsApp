@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Artem.Doctors.Api.Controllers
@@ -22,12 +23,15 @@ namespace Artem.Doctors.Api.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(RecordDto model)
+        public ActionResult<RecordDto> Create(RecordDto model)
         {
             var doctorExists = _context.Doctors.Where(d => d.Id == model.DoctorId).Any();
             var patientExists = _context.Patients.Where(p => p.Id == model.PatientId).Any();
             if (!(doctorExists && patientExists))
                 return NotFound();
+
+            if (!VerifyAccessPolicies(model))
+                return Forbid();
 
             // Verify record can be scheduled and has no conflicts with other records
             var timeOverlap = _context.Records.Where(r => (model.From >= r.From && model.From <= r.To) || (model.To >= r.From && model.To <= r.To)).Any();
@@ -44,7 +48,35 @@ namespace Artem.Doctors.Api.Controllers
                 CreatedBy = userId
             });
             _context.SaveChanges();
-            return null;
+            return Ok(model);
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public ActionResult Delete([FromQuery]Guid doctorId, [FromQuery]Guid patientId)
+        {
+            var record = _context.Records.Find(new[] { doctorId, patientId });
+            if (record == null)
+                return NotFound();
+
+            if (!VerifyAccessPolicies(new RecordDto { DoctorId = doctorId, PatientId = patientId }))
+                return Forbid();
+
+            _context.Records.Remove(record);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        private bool VerifyAccessPolicies(RecordDto record)
+        {
+            var userId = new Guid(User.FindFirst(JwtRegisteredClaimNames.Sub).Value);
+            var userRole = Enum.Parse<UserRole>(User.FindFirst(ClaimTypes.Role).Value);
+            if (userRole == UserRole.Doctor)
+                return userId == record.DoctorId; // Doctor can operate on his own records only
+            else if (userRole == UserRole.Patient)
+                return userId == record.PatientId; // Patient can operate on his own records only
+            else
+                return true;
         }
     }
 }
