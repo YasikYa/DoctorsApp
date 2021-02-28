@@ -5,15 +5,6 @@ import { authReducer } from './auth';
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        // app: appReducer,
-        // users: usersReducer,
-        // auth: authReducer,
-        // results: resultsReducer,
-        // farms: farmsReducer,
-        // companies: companiesReducer,
-        // backgrounds: backgroundsReducer,
-        // complexes: complexesReducer,
-        // postingSessions: postingSessionsReducer,
     },
     // middleware: [
     //     ...getDefaultMiddleware({

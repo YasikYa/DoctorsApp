@@ -35,7 +35,7 @@ class HttpService {
     }
 
     private handleError(error: AxiosError): Promise<AxiosResponse> {
-        if (error.response && error.response.status) {
+        if (error.response?.status) {
             switch (error.response.status) {
                 // case 401:
                 //     tokenService.removeToken();
