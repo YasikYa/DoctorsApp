@@ -1,7 +1,44 @@
+@import './style/reset.scss';
+
 :root {
     font-size: 10px;
 }
 
 body {
     font-size: 1.6rem;
+    min-width: 320px;
+    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+    // overflow-y: scroll;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    &__main {
+        flex-grow: 1;
+        display: flex;
+
+        .page {
+            width: 100%;
+        }
+    }
+}
+
+input[data-error="true"],
+.ant-picker.error,
+.ant-input-password.error {
+    border-color: #f11629;
+    background-color: #fae6e6 !important;
+
+    input {
+        background-color: #fae6e6 !important;
+    }
+
+    &::placeholder,
+    input::placeholder {
+        color: #000;
+    }
 }

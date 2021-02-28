@@ -1,5 +1,5 @@
-import { CSSProperties } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { CSSProperties } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
 interface PageTypeProps<P> extends RouteComponentProps<P> {
     className?: string;
