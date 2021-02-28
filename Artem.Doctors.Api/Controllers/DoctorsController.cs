@@ -1,5 +1,7 @@
 ﻿using Artem.Doctors.Data;
 using Artem.Doctors.Data.DTOs;
+using Artem.Doctors.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +26,11 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(_context.Doctors.Select(d => new DoctorDto
             {
                 Id = d.Id,
-                FirstName = d.FirstName,
-                LastName = d.LastName,
-                DateOfBirth = d.DateOfBirth,
-                Address = d.Address
+                FirstName = d.Identity.FirstName,
+                LastName = d.Identity.LastName,
+                DateOfBirth = d.Identity.DateOfBirth,
+                ContactPhone = d.ContactPhone,
+                ConsultPrice = d.ConsultPrice
             }).ToList());
         }
 
@@ -41,15 +44,17 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(new DoctorDetailsDto
             {
                 Id = doctor.Id,
-                FirstName = doctor.FirstName,
-                LastName = doctor.LastName,
-                DateOfBirth = doctor.DateOfBirth,
-                Address = doctor.Address,
+                FirstName = doctor.Identity.FirstName,
+                LastName = doctor.Identity.LastName,
+                DateOfBirth = doctor.Identity.DateOfBirth,
+                ContactPhone = doctor.ContactPhone,
+                ConsultPrice = doctor.ConsultPrice,
                 Email = doctor.Identity.Email,
                 Specialties = doctor.Specialties.Select(s => new SpecialtyDto { Id = s.Id, Name = s.Name })
             });
         }
 
+        [Authorize(Roles = nameof(UserRole.Admin))]
         [HttpPost]
         public IActionResult Create(DoctorCreateDto model)
         {
@@ -57,17 +62,19 @@ namespace Artem.Doctors.Api.Controllers
             if (identityExists)
                 return BadRequest("Doctor exists");
 
-            var doctor = new Data.Models.Doctor
+            var doctor = new Doctor
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.Address,
-                DateOfBirth = model.DateOfBirth,
+
+                ContactPhone = model.ContactPhone,
+                ConsultPrice = model.ConsultPrice,
                 Identity = new Data.Models.User
                 {
                     Email = model.Email,
                     Password = model.Password,
-                    Role = Data.Models.UserRole.Doctor
+                    Role = Data.Models.UserRole.Doctor,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth,
                 }
             };
             _context.Doctors.Add(doctor);
@@ -83,6 +90,7 @@ namespace Artem.Doctors.Api.Controllers
             return Ok(doctor.Id);
         }
 
+        [Authorize(Roles = nameof(UserRole.Admin))]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] Guid id)
         {

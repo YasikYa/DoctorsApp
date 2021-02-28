@@ -4,14 +4,16 @@ using Artem.Doctors.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Artem.Doctors.Data.Migrations
 {
     [DbContext(typeof(DoctorsDbContext))]
-    partial class DoctorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210227173341_SeedAdminAndSurgeonSpec")]
+    partial class SeedAdminAndSurgeonSpec
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

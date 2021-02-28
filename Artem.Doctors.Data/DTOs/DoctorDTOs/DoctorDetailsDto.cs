@@ -14,7 +14,9 @@ namespace Artem.Doctors.Data.DTOs
 
         public DateTime DateOfBirth { get; set; }
 
-        public string Address { get; set; }
+        public string ContactPhone { get; set; }
+
+        public int ConsultPrice { get; set; }
 
         public string Email { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using Artem.Doctors.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Artem.Doctors.Data
 {
@@ -18,7 +19,7 @@ namespace Artem.Doctors.Data
             base.OnModelCreating(modelBuilder);
 
             ConfigureRelations(modelBuilder);
-
+            ConfigureData(modelBuilder);
             modelBuilder.Entity<User>()
                         .Property(u => u.Role)
                         .HasConversion<string>();
@@ -54,6 +55,32 @@ namespace Artem.Doctors.Data
                         .WithMany(p => p.Records)
                         .HasForeignKey(r => r.PatientId)
                         .OnDelete(DeleteBehavior.NoAction);
+        }
+
+        private void ConfigureData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(new User[]
+            {
+                new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = "admin@mail.com",
+                    Password = "admin",
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    DateOfBirth = DateTime.Now,
+                    Role = UserRole.Admin
+                }
+            });
+
+            modelBuilder.Entity<Specialty>().HasData(new Specialty[]
+            {
+                new Specialty
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Surgeon"
+                }
+            });
         }
     }
 }

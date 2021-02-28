@@ -1,34 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Artem.Doctors.Data.Models
+namespace Artem.Doctors.Data.DTOs
 {
-    public class User
+    public class UserCreateDto
     {
-        public Guid Id { get; set; }
-
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
+        [Required]
         public DateTime DateOfBirth { get; set; }
 
+        [Required]
         public string Email { get; set; }
 
+        [Required]
         public string Password { get; set; }
-
-        public UserRole Role { get; set; }
-
-        public Doctor Doctor { get; set; }
-
-        public Patient Patient { get; set; }
-    }
-
-    public enum UserRole
-    {
-        Admin,
-        Patient,
-        Doctor
     }
 }

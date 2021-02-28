@@ -4,14 +4,16 @@ using Artem.Doctors.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Artem.Doctors.Data.Migrations
 {
     [DbContext(typeof(DoctorsDbContext))]
-    partial class DoctorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210227155419_ChangeIdentityModel")]
+    partial class ChangeIdentityModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,13 +83,6 @@ namespace Artem.Doctors.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialties");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1ea56bd6-9397-40c4-b056-6d2f747216a6"),
-                            Name = "Surgeon"
-                        });
                 });
 
             modelBuilder.Entity("Artem.Doctors.Data.Models.User", b =>
@@ -118,18 +113,6 @@ namespace Artem.Doctors.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6df0e56c-3c61-455b-96bd-a205cbc15fb0"),
-                            DateOfBirth = new DateTime(2021, 2, 27, 19, 33, 40, 858, DateTimeKind.Local).AddTicks(5257),
-                            Email = "admin@mail.com",
-                            FirstName = "Admin",
-                            LastName = "Admin",
-                            Password = "admin",
-                            Role = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("DoctorSpecialty", b =>
