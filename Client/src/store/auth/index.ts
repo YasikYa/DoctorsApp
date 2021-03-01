@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthStore } from './types';
 import { tokenService } from 'services/TokenService';
-import { fetchLogin } from './actions';
+import { fetchLogin, fetchSignUp } from './actions';
+import { message } from 'antd';
 
 const initialState: AuthStore = {
     loadingFlags: {},
@@ -19,17 +20,25 @@ export const authSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchLogin.pending, (state) => {
-            state.loadingFlags[fetchLogin.typePrefix] = true;
-        });
         builder.addCase(fetchLogin.fulfilled, (state, { payload: { token, rememberMe } }) => {
             state.isAuthorized = true;
-            state.loadingFlags[fetchLogin.typePrefix] = false;
 
             tokenService.setToken(token, rememberMe);
         });
         builder.addCase(fetchLogin.rejected, (_, { payload }) => {
-            console.log(payload);
+            message.error('Something went wrong');
+
+            console.error(payload);
+        });
+        builder.addCase(fetchSignUp.fulfilled, (_, { payload }) => {
+            if (payload.success) {
+                message.success('Registration completed successfully, tou can log in');
+            }
+        });
+        builder.addCase(fetchSignUp.rejected, (_, { payload }) => {
+            message.error('Something went wrong');
+
+            console.error(payload);
         });
     },
 });
