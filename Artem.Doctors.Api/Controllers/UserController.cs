@@ -4,6 +4,7 @@ using Artem.Doctors.Data;
 using Artem.Doctors.Data.DTOs;
 using Artem.Doctors.Data.DTOs.UserDTOs;
 using Artem.Doctors.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +28,27 @@ namespace Artem.Doctors.Api.Controllers
 
         public UserController(IConfiguration configuration, DoctorsDbContext context) => (_configuration, _context) = (configuration, context);
 
+        [Authorize]
+        [HttpGet("me")]
+        public ActionResult<UserDto> Current()
+        {
+            var userId = new Guid(User.FindFirst(JwtRegisteredClaimNames.Sub).Value);
+
+            var user = _context.Users.Find(userId);
+            if (user == null)
+                return NotFound();
+
+            return Ok(new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Role = user.Role
+            });
+        }
+
         [HttpPost("token")]
-        public ActionResult Get(LoginDto model)
+        public ActionResult Token(LoginDto model)
         {
             var user = _context.Users.Where(u => u.Email == model.Email).FirstOrDefault();
             if (user == null || user.Password != model.Password)
