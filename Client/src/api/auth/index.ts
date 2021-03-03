@@ -1,6 +1,6 @@
-import { post } from 'services/HttpService';
+import { get, post } from 'services/HttpService';
 import { RequestParams } from 'api/types';
-import { LoginPayload, SignUpPayload, Token } from './types';
+import { LoginPayload, SignUpPayload, Token, UserInfo } from './types';
 
 export const login = async ({ payload: { email, password } }: RequestParams<LoginPayload>) => {
     const { data: token } = await post<Token>('/api/User/token', {
@@ -15,3 +15,5 @@ export const login = async ({ payload: { email, password } }: RequestParams<Logi
 };
 
 export const signUp = ({ payload }: RequestParams<SignUpPayload>) => post('/api/User', payload);
+
+export const getMyself = () => get<UserInfo>('/api/User/me');

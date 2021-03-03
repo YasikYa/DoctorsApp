@@ -1,17 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createSelectorHook, useDispatch as useAppDispatch } from 'react-redux';
 import { authReducer } from './auth';
+import { doctorsReducer } from './doctors';
+import { specialtiesReducer } from './specialties';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        doctors: doctorsReducer,
+        specialties: specialtiesReducer,
     },
-    // middleware: [
-    //     ...getDefaultMiddleware({
-    //         immutableCheck: false,
-    //         serializableCheck: false,
-    //     }),
-    // ],
+    middleware: [
+        ...getDefaultMiddleware({
+            serializableCheck: false,
+        }),
+    ],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,13 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { login, signUp } from 'api/auth';
+import { getMyself, login, signUp } from 'api/auth';
 import { LoginPayload, SignUpPayload } from 'api/auth/types';
+import { tokenService } from 'services/TokenService';
+
+export const fethMyself = createAsyncThunk('auth/fethMyself', () => getMyself());
 
 export const fetchLogin = createAsyncThunk(
     'auth/fetchLogin',
-    async ({ email, password, rememberMe }: LoginPayload & { rememberMe: boolean }) => {
+    async (
+        { email, password, rememberMe }: LoginPayload & { rememberMe: boolean },
+        { dispatch }
+    ) => {
         const token = await login({ payload: { email, password } });
 
-        return { token, rememberMe };
+        tokenService.setToken(token, rememberMe);
+
+        dispatch(fethMyself());
+
+        return { success: true };
     }
 );
 

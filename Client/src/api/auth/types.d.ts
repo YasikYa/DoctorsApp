@@ -1,3 +1,5 @@
+import { string } from 'yup/lib/locale';
+
 export type Token = {
     access_token: string;
     expires_in: number;
@@ -14,4 +16,13 @@ export type SignUpPayload = {
     dateOfBirth: string;
     email: string;
     password: string;
+};
+
+export type UserRole = 'Admin' | 'Patient' | 'Doctor';
+
+export type UserInfo = {
+    id: string;
+    email: string;
+    fullName: string;
+    role: string;
 };

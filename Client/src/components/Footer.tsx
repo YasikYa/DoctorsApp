@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const FooterUnstyled = ({ className }: { className?: string }) => {
     return (
         <footer className={className}>
-            <Container>2021</Container>
+            <Container>2021 footer</Container>
         </footer>
     );
 };
