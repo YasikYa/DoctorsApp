@@ -1,15 +1,19 @@
-@import './style/reset.scss';
+@import url('./style/reset.scss');
 
-:root {
+html {
     font-size: 10px;
 }
 
 body {
-    font-size: 1.6rem;
+    font-size: 1.6rem !important;
     min-width: 320px;
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
-    // overflow-y: scroll;
+}
+
+a:hover,
+a[class]:hover {
+    color: #40a9ff !important;
 }
 
 .app {

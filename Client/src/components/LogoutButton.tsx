@@ -3,6 +3,7 @@ import { useDispatch } from 'store';
 import { useHistory } from 'react-router-dom';
 import { logout } from 'store/auth';
 import { paths } from 'routes/paths';
+import { Button } from 'antd';
 
 export const LogoutButton = () => {
     const dispatch = useDispatch();
@@ -16,5 +17,5 @@ export const LogoutButton = () => {
         push(paths.LOGIN);
     };
 
-    return <button onClick={handleLogout}>Log out</button>;
+    return <Button onClick={handleLogout}>Выйти</Button>;
 };

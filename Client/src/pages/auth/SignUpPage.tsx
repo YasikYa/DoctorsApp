@@ -45,7 +45,7 @@ const SignUpFormSchema = Yup.object().shape({
 const SignUpPage: PageType = ({ className }) => {
     const dispatch = useDispatch();
 
-    const { isAuthorized } = useSelector((state) => ({ isAuthorized: state.auth.isAuthorized }));
+    const isAuthorized = useSelector((state) => state.auth.isAuthorized);
 
     const form = useFormik<SignUpFormValues>({
         initialValues: {

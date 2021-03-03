@@ -1,29 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthStore } from './types';
 import { tokenService } from 'services/TokenService';
-import { fetchLogin, fetchSignUp } from './actions';
+import { fetchLogin, fetchSignUp, fethMyself } from './actions';
 import { message } from 'antd';
+
 
 const initialState: AuthStore = {
     loadingFlags: {},
     isAuthorized: Boolean(tokenService.getToken()),
+    userInfo: null,
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         logout: (state) => {
             state.isAuthorized = false;
+            state.userInfo = null;
 
             tokenService.removeToken();
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchLogin.fulfilled, (state, { payload: { token, rememberMe } }) => {
+        builder.addCase(fetchLogin.fulfilled, (state) => {
             state.isAuthorized = true;
-
-            tokenService.setToken(token, rememberMe);
         });
         builder.addCase(fetchLogin.rejected, (_, { payload }) => {
             message.error('Something went wrong');
@@ -39,6 +40,11 @@ export const authSlice = createSlice({
             message.error('Something went wrong');
 
             console.error(payload);
+        });
+        builder.addCase(fethMyself.fulfilled, (state, { payload }) => {
+            state.userInfo = payload.data;
+
+            localStorage.setItem('role', payload.data.role);
         });
     },
 });
