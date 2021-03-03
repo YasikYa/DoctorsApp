@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import './App.less';
+import './App.scss';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { RouteInfo } from 'routes';

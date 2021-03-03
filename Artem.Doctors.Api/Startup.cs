@@ -68,7 +68,8 @@ namespace Artem.Doctors.Api
                         ValidIssuer = jwtConfig.Issuer,
                         ValidateAudience = true,
                         ValidateIssuer = true,
-                        IssuerSigningKey = signInKey
+                        IssuerSigningKey = signInKey,
+                        RoleClaimType = "role"
                     };
                 });
             services.AddAuthorization();

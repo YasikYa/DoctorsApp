@@ -1,4 +1,4 @@
-@import url('./style/reset.scss');
+@import './style/reset.scss';
 
 html {
     font-size: 10px;
@@ -44,5 +44,19 @@ input[data-error="true"],
     &::placeholder,
     input::placeholder {
         color: #000;
+    }
+}
+
+.ant-modal-confirm-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    button:first-child {
+        flex-basis: calc(35% - 12px);
+    }
+
+    button:nth-child(2) {
+        flex-basis: calc(65% - 12px);
     }
 }

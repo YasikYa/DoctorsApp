@@ -1,15 +1,15 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { BASE_URL } from 'shared/constants';
-// import { paths } from 'routes/paths';
-// import { history } from 'lib/history';
+import { paths } from 'routes/paths';
+import { history } from 'lib/history';
 import { tokenService } from './TokenService';
 
 class HttpService {
     public instance: AxiosInstance;
 
-    constructor() {
+    constructor(baseURL: string) {
         const instance = axios.create({
-            baseURL: BASE_URL,
+            baseURL,
         });
 
         // setting the token if it exists
@@ -37,10 +37,10 @@ class HttpService {
     private handleError(error: AxiosError): Promise<AxiosResponse> {
         if (error.response?.status) {
             switch (error.response.status) {
-                // case 401:
-                //     tokenService.removeToken();
-                //     history.push(paths.LOGIN);
-                //     break;
+                case 401:
+                    tokenService.removeToken();
+                    history.push(paths.LOGIN);
+                    break;
                 // case 403:
                 // case 500:
                 //     history.push(paths.ERROR);
@@ -53,8 +53,21 @@ class HttpService {
 
         return Promise.reject(error.response);
     }
+    
+    public createCancelToken(signal: AbortSignal) {
+        const source = axios.CancelToken.source();
+
+        signal.addEventListener('abort', () => {
+            source.cancel();
+        });
+
+        return source.token;
+    }
 }
 
-const { instance } = new HttpService();
+const httpService = new HttpService(BASE_URL);
 
-export const { get, post, put, delete: del } = instance;
+export const {
+    createCancelToken,
+    instance: { get, post, put, delete: del },
+} = httpService;

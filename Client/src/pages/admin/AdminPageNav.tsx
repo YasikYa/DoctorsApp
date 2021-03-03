@@ -32,9 +32,15 @@ export const AdminPageNav = styled(({ className }: { className?: string }) => {
         padding: 1.5rem 2.5rem;
         color: #9a6ff5;
         font-weight: 500;
+        transition: all 200ms ease-in-out;
 
         a:hover {
             color: #9a6ff5 !important;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: rgba(0, 0, 0, 0.018);
         }
 
         &::after {
