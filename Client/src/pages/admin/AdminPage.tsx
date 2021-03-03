@@ -10,7 +10,7 @@ import { AdminPageNav, adminPaths } from './AdminPageNav';
 // import { useDispatch, useSelector } from 'store';
 // import { fetchAllDoctors } from 'store/doctors/actions';
 
-const AdminSpecialtiesPage = lazy(() => import('./AdminSpecialtiesPage'));
+const AdminSpecialtiesPage = lazy(() => import('./Specialties/SpecialtiesPage'));
 
 const AdminPage: PageType = ({ location: { pathname }, className }) => {
     // const dispatch = useDispatch();
