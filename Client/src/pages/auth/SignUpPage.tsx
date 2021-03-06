@@ -28,18 +28,20 @@ interface SignUpFormValues {
 }
 
 const SignUpFormSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
+    firstName: Yup.string().required('Имя обязательно'),
+    lastName: Yup.string().required('Фамилия обязательна'),
     dateOfBirth: Yup.object()
         .nullable(true)
-        .test('requiredWhenNull', 'Date is required', (value) => (value === null ? false : true)),
-    email: Yup.string().required('Email required').matches(REGEXP_EMAIL, 'Invalid email address'),
+        .test('requiredWhenNull', 'Дата рождения обязательна', (value) => value !== null),
+    email: Yup.string()
+        .required('Электронна почта обязательна')
+        .matches(REGEXP_EMAIL, 'Неверный формат'),
     password: Yup.string()
-        .required('Password is required')
-        .min(6, 'Password must contain at least 6 characters'),
+        .required('Пароль обязателен')
+        .min(6, 'Пароль должен содержать не менее 6 символов'),
     passwordConfirmation: Yup.string()
-        .required('Repeat password is required')
-        .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+        .required('Повторный пароль обязателен')
+        .oneOf([Yup.ref('password'), null], 'Пароли не одинаковы'),
 });
 
 const SignUpPage: PageType = ({ className }) => {
@@ -81,11 +83,11 @@ const SignUpPage: PageType = ({ className }) => {
         >
             <Container>
                 <form onSubmit={form.handleSubmit}>
-                    <h1>Create account</h1>
+                    <h1>Создание аккаунта</h1>
 
                     <div className="form-fields">
                         <FormField>
-                            <label htmlFor="firstName">First name *</label>
+                            <label htmlFor="firstName">Имя *</label>
 
                             <Input
                                 size="large"
@@ -93,7 +95,7 @@ const SignUpPage: PageType = ({ className }) => {
                                     Boolean(form.errors.firstName) &&
                                     Boolean(form.touched.firstName)
                                 }
-                                placeholder="Enter first name"
+                                placeholder="Введите имя"
                                 value={form.values.firstName}
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
@@ -106,14 +108,14 @@ const SignUpPage: PageType = ({ className }) => {
                         </FormField>
 
                         <FormField>
-                            <label htmlFor="lastName">Last name *</label>
+                            <label htmlFor="lastName">Фамилия *</label>
 
                             <Input
                                 size="large"
                                 data-error={
                                     Boolean(form.errors.lastName) && Boolean(form.touched.lastName)
                                 }
-                                placeholder="Enter last name"
+                                placeholder="Введите фамилию"
                                 value={form.values.lastName}
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
@@ -126,7 +128,7 @@ const SignUpPage: PageType = ({ className }) => {
                         </FormField>
 
                         <FormField>
-                            <label htmlFor="dateOfBirth">Date of birth *</label>
+                            <label htmlFor="dateOfBirth">Дата рождения *</label>
 
                             <DatePicker
                                 id="dateOfBirth"
@@ -140,7 +142,7 @@ const SignUpPage: PageType = ({ className }) => {
                                 style={{ width: '100%' }}
                                 format={DATE_FORMAT}
                                 allowClear={false}
-                                placeholder="Choose date"
+                                placeholder="Выберете дату рождения"
                                 name="dateOfBirth"
                                 onBlur={form.handleBlur}
                                 onChange={(value: moment.Moment | null) => {
@@ -155,7 +157,7 @@ const SignUpPage: PageType = ({ className }) => {
                         </FormField>
 
                         <FormField>
-                            <label htmlFor="email">Email *</label>
+                            <label htmlFor="email">Электронная почта *</label>
 
                             <Input
                                 size="large"
@@ -163,7 +165,7 @@ const SignUpPage: PageType = ({ className }) => {
                                     Boolean(form.errors.email) && Boolean(form.touched.email)
                                 }
                                 type="email"
-                                placeholder="Enter email"
+                                placeholder="Введите электронную почту"
                                 value={form.values.email}
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
@@ -176,7 +178,7 @@ const SignUpPage: PageType = ({ className }) => {
                         </FormField>
 
                         <FormField>
-                            <label htmlFor="password">Password *</label>
+                            <label htmlFor="password">Пароль *</label>
 
                             <Input.Password
                                 size="large"
@@ -186,7 +188,7 @@ const SignUpPage: PageType = ({ className }) => {
                                         Boolean(form.touched.password),
                                 })}
                                 visibilityToggle={true}
-                                placeholder="Enter password"
+                                placeholder="Введите пароль"
                                 value={form.values.password}
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
@@ -199,7 +201,7 @@ const SignUpPage: PageType = ({ className }) => {
                         </FormField>
 
                         <FormField>
-                            <label htmlFor="passwordConfirmation">Repeat password *</label>
+                            <label htmlFor="passwordConfirmation">Повторите пароль *</label>
 
                             <Input.Password
                                 size="large"
@@ -210,7 +212,7 @@ const SignUpPage: PageType = ({ className }) => {
                                 })}
                                 visibilityToggle={true}
                                 type="password"
-                                placeholder="Repeat password"
+                                placeholder="Повторите пароль"
                                 value={form.values.passwordConfirmation}
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
@@ -231,7 +233,7 @@ const SignUpPage: PageType = ({ className }) => {
                         disabled={!form.isValid}
                         loading={form.isSubmitting}
                     >
-                        Sign up
+                        Создать аккаунт
                     </Button>
                 </form>
             </Container>

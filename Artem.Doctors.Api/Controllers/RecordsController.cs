@@ -22,9 +22,21 @@ namespace Artem.Doctors.Api.Controllers
         public RecordsController(DoctorsDbContext context) => _context = context;
 
         [HttpGet("doctor/{id}")]
-        public ActionResult<IEnumerable<RecordDto>> GetAll([FromRoute]Guid doctorId)
+        public ActionResult<IEnumerable<RecordDto>> GetAllByDoctorId([FromRoute]Guid doctorId)
         {
             return Ok(_context.Records.Where(r => r.DoctorId == doctorId).Select(r => new RecordDto
+            {
+                DoctorId = r.DoctorId,
+                PatientId = r.PatientId,
+                From = r.From,
+                To = r.To
+            }).ToList());
+        }
+
+        [HttpGet("patient/{id}")]
+        public ActionResult<IEnumerable<RecordDto>> GetAllByPacientId([FromRoute] Guid patientId)
+        {
+            return Ok(_context.Records.Where(r => r.PatientId == patientId).Select(r => new RecordDto
             {
                 DoctorId = r.DoctorId,
                 PatientId = r.PatientId,
@@ -82,7 +94,7 @@ namespace Artem.Doctors.Api.Controllers
         private bool VerifyAccessPolicies(RecordDto record)
         {
             var userId = new Guid(User.FindFirst(JwtRegisteredClaimNames.Sub).Value);
-            var userRole = Enum.Parse<UserRole>(User.FindFirst(ClaimTypes.Role).Value);
+            var userRole = Enum.Parse<UserRole>(User.FindFirst("role").Value);
             if (userRole == UserRole.Doctor)
                 return userId == record.DoctorId; // Doctor can operate on his own records only
             else if (userRole == UserRole.Patient)

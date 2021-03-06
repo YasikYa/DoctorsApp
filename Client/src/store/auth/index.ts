@@ -1,12 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthStore } from './types';
 import { tokenService } from 'services/TokenService';
-import { fetchLogin, fetchSignUp, fethMyself } from './actions';
+import { fetchLogin, fetchSignUp, fetchMyself } from './actions';
 import { message } from 'antd';
 
-
 const initialState: AuthStore = {
-    loadingFlags: {},
     isAuthorized: Boolean(tokenService.getToken()),
     userInfo: null,
 };
@@ -27,21 +25,23 @@ const authSlice = createSlice({
             state.isAuthorized = true;
         });
         builder.addCase(fetchLogin.rejected, (_, { payload }) => {
-            message.error('Something went wrong');
+            message.error('Что-то пошло не так, попробуйте позже');
 
             console.error(payload);
         });
         builder.addCase(fetchSignUp.fulfilled, (_, { payload }) => {
             if (payload.success) {
-                message.success('Registration completed successfully, tou can log in');
+                message.success(
+                    'Аккаунт успешно создан, вы можете войти в аккаунт на странице авторизации'
+                );
             }
         });
         builder.addCase(fetchSignUp.rejected, (_, { payload }) => {
-            message.error('Something went wrong');
+            message.error('Что-то пошло не так, попробуйте позже');
 
             console.error(payload);
         });
-        builder.addCase(fethMyself.fulfilled, (state, { payload }) => {
+        builder.addCase(fetchMyself.fulfilled, (state, { payload }) => {
             state.userInfo = payload.data;
 
             localStorage.setItem('role', payload.data.role);

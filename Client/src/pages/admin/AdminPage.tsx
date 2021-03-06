@@ -8,27 +8,15 @@ import styled from 'styled-components';
 import { AdminPageNav, adminPaths } from './AdminPageNav';
 // import { useEffect } from 'react';
 // import { useDispatch, useSelector } from 'store';
-// import { fetchAllDoctors } from 'store/doctors/actions';
+// import { fetchAllDoctors } from 'store/doctors/actions';CreateDoctorPage
 
 const AdminSpecialtiesPage = lazy(() => import('./Specialties/SpecialtiesPage'));
+const AdminDoctorsPage = lazy(() => import('./Doctors/DoctorsPage'));
+const AdminCreateDoctorPage = lazy(() => import('./Doctors/CreateDoctorPage'));
 
 const AdminPage: PageType = ({ location: { pathname }, className }) => {
-    // const dispatch = useDispatch();
-
-    // const { loadedDoctors } = useSelector((state) => ({
-    //     allDoctors: state.doctors.entities,
-    //     loadingFlags: state.doctors.loadingFlags,
-    //     loadedDoctors: state.doctors.loadedDoctors,
-    // }));
-
-    // useEffect(() => {
-    //     if (!loadedDoctors) {
-    //         dispatch(fetchAllDoctors());
-    //     }
-    // }, [dispatch, loadedDoctors]);
-
     if (pathname === paths.ADMIN_PANEL) {
-        return <Redirect to="/admin/specialties" />;
+        return <Redirect to="/admin/doctors" />;
     }
     return (
         <div className={classNames('page', { [className!]: className })}>
@@ -41,6 +29,12 @@ const AdminPage: PageType = ({ location: { pathname }, className }) => {
                             exact
                             path={adminPaths.specialties.to}
                             component={AdminSpecialtiesPage}
+                        />
+                        <Route exact path={adminPaths.doctors.to} component={AdminDoctorsPage} />
+                        <Route
+                            exact
+                            path="/admin/doctors/create"
+                            component={AdminCreateDoctorPage}
                         />
                     </Switch>
                 </div>
@@ -60,6 +54,6 @@ export default styled(AdminPage)`
 
     .page-body {
         flex: 1;
-        padding-inline-start: 100px;
+        padding-inline-start: 75px;
     }
 `;

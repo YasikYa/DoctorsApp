@@ -12,6 +12,7 @@ import { Container } from 'shared/components/Container';
 import { fetchLogin } from 'store/auth/actions';
 import { Redirect } from 'react-router-dom';
 import { paths } from 'routes/paths';
+import classNames from 'classnames';
 
 interface LoginFormValues {
     email: string;
@@ -20,8 +21,8 @@ interface LoginFormValues {
 }
 
 const LoginFormSchema = Yup.object().shape({
-    password: Yup.string().required('Password required'),
-    email: Yup.string().required('Email required').matches(REGEXP_EMAIL, 'Invalid email address'),
+    password: Yup.string().required('Пароль обязателен'),
+    email: Yup.string().required('Почта обязательна').matches(REGEXP_EMAIL, 'Неверный формат'),
 });
 
 const LoginPage: PageType = () => {
@@ -54,16 +55,16 @@ const LoginPage: PageType = () => {
         <div className="page auth-page login-page">
             <Container>
                 <form onSubmit={form.handleSubmit}>
-                    <h1>Account login</h1>
+                    <h1>Вход в аккаунт</h1>
 
                     <FormField>
-                        <label htmlFor="email">Email *</label>
+                        <label htmlFor="email">Почта *</label>
 
                         <Input
                             size="large"
                             data-error={Boolean(form.errors.email) && Boolean(form.touched.email)}
                             type="email"
-                            placeholder="Enter email"
+                            placeholder="Введите почту"
                             value={form.values.email}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
@@ -77,16 +78,17 @@ const LoginPage: PageType = () => {
                     </FormField>
 
                     <FormField>
-                        <label htmlFor="password">Password *</label>
+                        <label htmlFor="password">Пароль *</label>
 
-                        <Input
+                        <Input.Password
+                            className={classNames({
+                                error:
+                                    Boolean(form.errors.password) && Boolean(form.touched.password),
+                            })}
                             autoComplete="false"
                             size="large"
-                            data-error={
-                                Boolean(form.errors.password) && Boolean(form.touched.password)
-                            }
                             type="password"
-                            placeholder="Enter password"
+                            placeholder="Введите пароль"
                             value={form.values.password}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
@@ -106,7 +108,7 @@ const LoginPage: PageType = () => {
                         checked={form.values.rememberMe}
                         onChange={form.handleChange}
                     >
-                        Remember me
+                        Запомнить меня
                     </Checkbox>
 
                     <Button
@@ -116,7 +118,7 @@ const LoginPage: PageType = () => {
                         disabled={!form.isValid}
                         loading={form.isSubmitting}
                     >
-                        Log in now
+                        Войти сейчас
                     </Button>
                 </form>
             </Container>

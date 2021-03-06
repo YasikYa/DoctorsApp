@@ -8,6 +8,8 @@ const LoginPage = lazy(() => import('pages/auth/LoginPage'));
 const SignUpPage = lazy(() => import('pages/auth/SignUpPage'));
 const NonExistentPage = lazy(() => import('pages/NonExistent'));
 const AdminDoctorsPage = lazy(() => import('pages/admin/AdminPage'));
+const DoctorsPage = lazy(() => import('pages/Doctors'));
+const RecordsPage = lazy(() => import('pages/Records'));
 
 export interface RouteInfo {
     path: string | string[];
@@ -18,6 +20,18 @@ export interface RouteInfo {
 }
 
 export const routes: RouteInfo[] = [
+    {
+        path: paths.RECORDS,
+        exact: true,
+        component: RecordsPage,
+        title: 'Записи на приём к врачу',
+    },
+    {
+        path: paths.DOCTORS,
+        exact: true,
+        component: DoctorsPage,
+        title: 'Врачи',
+    },
     {
         path: paths.ADMIN_PANEL,
         exact: false,

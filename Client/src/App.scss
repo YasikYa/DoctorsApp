@@ -8,6 +8,7 @@ body {
     font-size: 1.6rem !important;
     min-width: 320px;
     overflow-x: hidden;
+    overflow-y: scroll;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -22,6 +23,7 @@ a[class]:hover {
     flex-direction: column;
 
     &__main {
+        overflow: hidden;
         flex-grow: 1;
         display: flex;
 
@@ -59,4 +61,39 @@ input[data-error="true"],
     button:nth-child(2) {
         flex-basis: calc(65% - 12px);
     }
+}
+
+.ant-picker-error {
+    border-color: #f11629 !important;
+    background-color: #fae6e6 !important;
+
+    .ant-picker-suffix {
+        color: #f11629 !important;
+    }
+
+    .ant-picker-input input::placeholder {
+        color: #000;
+    }
+}
+
+.ant-select[data-error="true"] {
+    .ant-select-selector {
+        border-color: #f11629;
+        background-color: #fae6e6 !important;
+    }
+
+    .ant-select-selection-placeholder {
+        color: #000000;
+    }
+}
+
+.ant-slider-handle {
+    border-color: #1890ff;
+}
+.ant-slider-track {
+    background-color: #1890ff;
+}
+
+.ant-picker-time-panel-column::after {
+    height: 0 !important;
 }

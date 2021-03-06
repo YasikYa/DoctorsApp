@@ -5,7 +5,6 @@ import { fetchAllSpecialties, fetchCreateSpecialty, fetchDeleteSpecialty } from 
 
 const initialState: SpecialtiesState = {
     entities: [],
-    loadingFlags: {},
     loadedSpecialties: false,
 };
 
@@ -15,13 +14,10 @@ const specialtiesSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         // fetch all
-        builder.addCase(fetchAllSpecialties.pending, (state) => {
-            state.loadingFlags[fetchAllSpecialties.typePrefix] = true;
-        });
         builder.addCase(fetchAllSpecialties.fulfilled, (state, { payload }) => {
             state.entities = payload;
 
-            state.loadingFlags[fetchAllSpecialties.typePrefix] = false;
+            state.loadedSpecialties = true;
         });
         // fetch creating
         builder.addCase(fetchCreateSpecialty.fulfilled, (state, { payload }) => {

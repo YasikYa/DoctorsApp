@@ -18,5 +18,5 @@ const LogotypeUnstyled = ({ className }: { className?: string }) => {
 
 export const Logotype = styled(LogotypeUnstyled)`
     display: flex;
-    color: #9a6ff5;
+    color: #1890ff;
 `;

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createDoctor, getAllDoctors } from 'api/doctors';
+import { createDoctor, deleteDoctor, getAllDoctors } from 'api/doctors';
 import { CreateDoctorPayload, Doctor } from 'api/doctors/types';
 
 export const fetchAllDoctors = createAsyncThunk('doctors/fetchAllDoctors', async () => {
@@ -12,5 +12,14 @@ export const fetchCreateDoctor = createAsyncThunk<Doctor, CreateDoctorPayload>(
     async (payload) => {
         const { data } = await createDoctor({ payload });
         return data;
+    }
+);
+
+export const fetchDeleteDoctor = createAsyncThunk(
+    'doctors/fetchDeleteDoctor',
+    async (payload: string) => {
+        await deleteDoctor({ payload });
+
+        return payload;
     }
 );
