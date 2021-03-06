@@ -34,7 +34,7 @@ namespace Artem.Doctors.Api.Controllers
         }
 
         [HttpGet("patient/{id}")]
-        public ActionResult<IEnumerable<RecordDto>> GetAllByPacientId([FromRoute] Guid patientId)
+        public ActionResult<IEnumerable<RecordDto>> GetAllByPatientId([FromRoute] Guid patientId)
         {
             return Ok(_context.Records.Where(r => r.PatientId == patientId).Select(r => new RecordDto
             {
