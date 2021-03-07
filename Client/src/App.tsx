@@ -6,19 +6,19 @@ import { RouteInfo } from 'routes';
 import { Header } from 'components/Header';
 import { Footer } from 'components/Footer';
 import { useDispatch, useSelector } from 'store';
-import { fethMyself } from 'store/auth/actions';
+import { fetchMyself } from 'store/auth/actions';
 import { useRoutes } from 'routes/useRoutes';
-// import BarLoader from 'react-spinners/BarLoader';
-// import { css } from '@emotion/core';
+import BarLoader from 'react-spinners/BarLoader';
+import { css } from '@emotion/core';
 
-// const override = css`
-//     position: fixed;
-//     left: 0;
-//     top: 0;
-//     right: 0;
-//     width: 100vw;
-//     background-color: transparent;
-// `;
+const override = css`
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    background-color: transparent;
+`;
 
 const RouteWithTitle = (props: RouteInfo) => (
     <>
@@ -32,17 +32,18 @@ const RouteWithTitle = (props: RouteInfo) => (
 
 export const App = () => {
     const dispatch = useDispatch();
+    const isGeneralLoading = useSelector((state) => state.app.isGeneralLoading);
     const isAuthorized = useSelector((state) => state.auth.isAuthorized);
 
     const { routes } = useRoutes();
 
     useEffect(() => {
-        isAuthorized && dispatch(fethMyself());
+        isAuthorized && dispatch(fetchMyself());
     }, [dispatch, isAuthorized]);
 
     return (
         <div className="app">
-            {/* <BarLoader loading={true} css={override} color="#9a6ff5" /> */}
+            <BarLoader loading={isGeneralLoading} css={override} color="#1890ff" />
 
             <Header />
 

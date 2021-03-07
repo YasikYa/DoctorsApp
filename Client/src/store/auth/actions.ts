@@ -3,7 +3,7 @@ import { getMyself, login, signUp } from 'api/auth';
 import { LoginPayload, SignUpPayload } from 'api/auth/types';
 import { tokenService } from 'services/TokenService';
 
-export const fethMyself = createAsyncThunk('auth/fethMyself', () => getMyself());
+export const fetchMyself = createAsyncThunk('auth/fetchMyself', () => getMyself());
 
 export const fetchLogin = createAsyncThunk(
     'auth/fetchLogin',
@@ -15,7 +15,7 @@ export const fetchLogin = createAsyncThunk(
 
         tokenService.setToken(token, rememberMe);
 
-        dispatch(fethMyself());
+        dispatch(fetchMyself());
 
         return { success: true };
     }

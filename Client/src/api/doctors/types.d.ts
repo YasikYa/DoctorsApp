@@ -1,3 +1,5 @@
+import { Specialty } from 'api/specialties/types';
+
 export type Doctor = {
     id: string;
     firstName: string;
@@ -5,6 +7,8 @@ export type Doctor = {
     dateOfBirth: string; // ISO string
     contactPhone: string;
     consultPrice: number;
+    email: string;
+    specialties: Specialty[];
 };
 
 export type CreateDoctorPayload = {

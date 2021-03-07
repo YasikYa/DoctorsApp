@@ -1,5 +1,3 @@
-import { string } from 'yup/lib/locale';
-
 export type Token = {
     access_token: string;
     expires_in: number;
@@ -24,5 +22,5 @@ export type UserInfo = {
     id: string;
     email: string;
     fullName: string;
-    role: string;
+    role: UserRole;
 };

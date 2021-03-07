@@ -21,37 +21,19 @@ namespace Artem.Doctors.Api.Controllers
         public DoctorsController(DoctorsDbContext context) => _context = context;
 
         [HttpGet]
-        public ActionResult<IEnumerable<DoctorDto>> GetAll()
+        public ActionResult<IEnumerable<DoctorDetailsDto>> GetAll()
         {
-            return Ok(_context.Doctors.Select(d => new DoctorDto
+            return Ok(_context.Doctors.Select(d => new DoctorDetailsDto
             {
                 Id = d.Id,
                 FirstName = d.Identity.FirstName,
                 LastName = d.Identity.LastName,
                 DateOfBirth = d.Identity.DateOfBirth,
                 ContactPhone = d.ContactPhone,
-                ConsultPrice = d.ConsultPrice
+                ConsultPrice = d.ConsultPrice,
+                Email = d.Identity.Email,
+                Specialties = d.Specialties.Select(s => new SpecialtyDto { Id = s.Id, Name = s.Name })
             }).ToList());
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<DoctorDetailsDto> Details([FromRoute] Guid id)
-        {
-            var doctor = _context.Doctors.Include(d => d.Specialties).Include(d => d.Identity).Where(d => d.Id == id).FirstOrDefault();
-            if (doctor == null)
-                return NotFound();
-
-            return Ok(new DoctorDetailsDto
-            {
-                Id = doctor.Id,
-                FirstName = doctor.Identity.FirstName,
-                LastName = doctor.Identity.LastName,
-                DateOfBirth = doctor.Identity.DateOfBirth,
-                ContactPhone = doctor.ContactPhone,
-                ConsultPrice = doctor.ConsultPrice,
-                Email = doctor.Identity.Email,
-                Specialties = doctor.Specialties.Select(s => new SpecialtyDto { Id = s.Id, Name = s.Name })
-            });
         }
 
         [Authorize(Roles = nameof(UserRole.Admin))]
@@ -87,7 +69,18 @@ namespace Artem.Doctors.Api.Controllers
                 speciality.Doctors.Add(doctor);
             }
             _context.SaveChanges();
-            return Ok(doctor.Id);
+
+            return Ok(new DoctorDetailsDto
+            {
+                Id = doctor.Id,
+                FirstName = doctor.Identity.FirstName,
+                LastName = doctor.Identity.LastName,
+                DateOfBirth = doctor.Identity.DateOfBirth,
+                ContactPhone = doctor.ContactPhone,
+                ConsultPrice = doctor.ConsultPrice,
+                Email = doctor.Identity.Email,
+                Specialties = doctor.Specialties.Select(s => new SpecialtyDto { Id = s.Id, Name = s.Name })
+            });
         }
 
         [Authorize(Roles = nameof(UserRole.Admin))]

@@ -13,7 +13,6 @@ export const useRoutes = () => {
                 if (isAuthorized && route.availableOnlyFor === role) {
                     return true;
                 }
-                console.log(route.availableOnlyFor)
                 return false;
             }
             return true;

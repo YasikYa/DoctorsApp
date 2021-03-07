@@ -7,7 +7,10 @@ import { useSelector } from 'store';
 import { Logotype } from 'components/Logotype';
 
 const HeaderUnstyled = ({ className }: { className?: string }) => {
-    const { isAuthorized } = useSelector((state) => ({ isAuthorized: state.auth.isAuthorized }));
+    const { isAuthorized, userInfo } = useSelector((state) => ({
+        isAuthorized: state.auth.isAuthorized,
+        userInfo: state.auth.userInfo,
+    }));
 
     return (
         <header className={className}>
@@ -15,6 +18,9 @@ const HeaderUnstyled = ({ className }: { className?: string }) => {
                 <Logotype />
 
                 <ul>
+                    <li>
+                        <NavLink to={paths.DOCTORS}>Врачи</NavLink>
+                    </li>
                     {!isAuthorized && (
                         <li>
                             <NavLink to={paths.LOGIN}>Авторизация</NavLink>
@@ -25,9 +31,14 @@ const HeaderUnstyled = ({ className }: { className?: string }) => {
                             <NavLink to={paths.SIGN_UP}>Регистрация</NavLink>
                         </li>
                     )}
-                    {isAuthorized && (
+                    {isAuthorized && userInfo?.role === 'Admin' && (
                         <li>
                             <NavLink to={paths.ADMIN_PANEL}>Админская панель</NavLink>
+                        </li>
+                    )}
+                    {isAuthorized && userInfo?.role !== 'Admin' && (
+                        <li>
+                            <NavLink to={paths.RECORDS}>Записи на приём</NavLink>
                         </li>
                     )}
                 </ul>
@@ -40,8 +51,8 @@ const HeaderUnstyled = ({ className }: { className?: string }) => {
 
 export const Header = styled(HeaderUnstyled)`
     position: relative;
-    z-index: 1;
-    box-shadow: -3px -7px 11px 0px rgb(0 0 0 / 75%);
+    z-index: 2;
+    box-shadow: 0px 0px 8px 4px rgba(34, 60, 80, 0.04);
     min-height: 60px;
     display: flex;
 
@@ -60,7 +71,7 @@ export const Header = styled(HeaderUnstyled)`
             position: relative;
             display: flex;
             padding: 2rem 2.5rem;
-            color: #9a6ff5;
+            color: #1890ff;
             font-weight: 500;
 
             a:hover {

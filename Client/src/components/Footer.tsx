@@ -14,5 +14,5 @@ export const Footer = styled(FooterUnstyled)`
     z-index: 1;
     padding-block-start: 1rem;
     padding-block-end: 1rem;
-    box-shadow: 3px 7px 11px 0px rgb(0 0 0 / 75%);
+    box-shadow: 0px 0px 8px 4px rgba(34, 60, 80, 0.04);
 `;

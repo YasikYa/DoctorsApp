@@ -39,7 +39,10 @@ export const SpecialtiesTable = styled(
                         ),
                     },
                 ]}
-                dataSource={specialties}
+                dataSource={specialties.map((specialty) => ({
+                    ...specialty,
+                    key: specialty.id,
+                }))}
             />
         );
     }
