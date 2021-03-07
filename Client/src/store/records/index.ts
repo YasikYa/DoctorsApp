@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import { RecordsState } from './types';
-import { fetchCreateRecord, fetchAllRecords } from './actions';
+import { fetchCreateRecord, fetchAllRecords, fetchDeleteRecord } from './actions';
 
 const initialState: RecordsState = {
     entities: [],
@@ -24,6 +24,14 @@ const recordsSlice = createSlice({
         });
         builder.addCase(fetchCreateRecord.rejected, () => {
             message.success('При сохранении что-то пошло не так, попробуйте позже');
+        });
+        // fetch deleting
+        builder.addCase(fetchDeleteRecord.fulfilled, (state, { payload }) => {
+            state.entities = state.entities.filter(({ doctorId, patientId }) => {
+                return doctorId !== payload.doctorId && patientId !== payload.patientId;
+            });
+
+            message.success('Запись на приём успешна отменена');
         });
     },
 });

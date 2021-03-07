@@ -21,7 +21,19 @@ namespace Artem.Doctors.Api.Controllers
 
         public RecordsController(DoctorsDbContext context) => _context = context;
 
-        [HttpGet("doctor/{id}")]
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<RecordDto>> GetAll()
+        {
+            return Ok(_context.Records.Select(r => new RecordDto
+            {
+                DoctorId = r.DoctorId,
+                PatientId = r.PatientId,
+                From = r.From,
+                To = r.To
+            }).ToList());
+        }
+
+        [HttpGet("doctor/{doctorId}")]
         public ActionResult<IEnumerable<RecordDto>> GetAllByDoctorId([FromRoute]Guid doctorId)
         {
             return Ok(_context.Records.Where(r => r.DoctorId == doctorId).Select(r => new RecordDto
@@ -33,7 +45,7 @@ namespace Artem.Doctors.Api.Controllers
             }).ToList());
         }
 
-        [HttpGet("patient/{id}")]
+        [HttpGet("patient/{patientId}")]
         public ActionResult<IEnumerable<RecordDto>> GetAllByPatientId([FromRoute] Guid patientId)
         {
             return Ok(_context.Records.Where(r => r.PatientId == patientId).Select(r => new RecordDto
@@ -79,7 +91,7 @@ namespace Artem.Doctors.Api.Controllers
         [HttpDelete]
         public ActionResult Delete([FromQuery]Guid doctorId, [FromQuery]Guid patientId)
         {
-            var record = _context.Records.Find(new[] { doctorId, patientId });
+            var record = _context.Records.Find(new object[]{ doctorId, patientId });
             if (record == null)
                 return NotFound();
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createRecord, getAllRecordsByRole } from 'api/records';
+import { createRecord, deleteRecord, getAllRecordsByRole } from 'api/records';
 import { Record } from 'api/records/types';
 
 export const fetchCreateRecord = createAsyncThunk<Record, Record>(
@@ -16,5 +16,14 @@ export const fetchAllRecords = createAsyncThunk(
         const { data } = await getAllRecordsByRole({ payload });
 
         return data;
+    }
+);
+
+export const fetchDeleteRecord = createAsyncThunk(
+    'records/fetchDeleteRecord',
+    async (payload: { doctorId: string; patientId: string }) => {
+        await deleteRecord({ payload });
+
+        return payload;
     }
 );

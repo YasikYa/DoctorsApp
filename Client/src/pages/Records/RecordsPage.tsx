@@ -1,32 +1,96 @@
 import { PageType } from 'pages/types';
-import { memo, useEffect } from 'react';
-import { useDispatch, useSelector } from 'store';
+import { memo, useCallback } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import { fetchAllRecords } from 'store/records/actions';
+import { Container } from 'shared/components/Container';
+import { Button, Empty } from 'antd';
+import { useDoctors } from 'hooks/useDoctors';
+import { useRecords } from 'hooks/useRecords';
+import { useCancelRecord } from './useCancelRecord';
 
 const RecordsPage: PageType = ({ className }) => {
-    const dispatch = useDispatch();
+    const { records } = useRecords();
+    const { doctorsById } = useDoctors();
 
-    const { records, loadedRecords, userInfo } = useSelector((state) => ({
-        records: state.records.entities,
-        loadedRecords: state.records.loadedRecords,
-        userInfo: state.auth.userInfo,
-    }));
+    const { cancelRecord } = useCancelRecord();
 
-    useEffect(() => {
-        if (userInfo && !loadedRecords) {
-            const { role, id } = userInfo;
+    const formatDate = useCallback((date: string) => {
+        return new Intl.DateTimeFormat('ru', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }).format(new Date(date));
+    }, []);
 
-            dispatch(fetchAllRecords({ role, id }));
-        }
-    }, [dispatch, loadedRecords, userInfo]);
+    const formatTime = useCallback((date: string) => {
+        return new Intl.DateTimeFormat('ru', {
+            hour: '2-digit',
+            minute: '2-digit',
+        }).format(new Date(date));
+    }, []);
 
-    useEffect(() => {
-        console.log(records);
-    }, [records]);
+    return (
+        <div className={classNames('page', { [className!]: className })}>
+            <Container>
+                <h1>Записи на приём</h1>
 
-    return <div className={classNames('page', { [className!]: className })}></div>;
+                {records.length ? (
+                    <ul className="records-list">
+                        {records.map(({ patientId, doctorId, from, to }) => (
+                            <li className="record" key={patientId + doctorId}>
+                                <span className="date">Когда: {formatDate(from)}</span>
+                                <span className="date">
+                                    Время: с {formatTime(from)} до {formatTime(to)}
+                                </span>
+                                <span>
+                                    Доктор: {doctorsById[doctorId]?.lastName}{' '}
+                                    {doctorsById[doctorId]?.firstName}
+                                </span>
+
+                                <Button
+                                    type="primary"
+                                    danger
+                                    onClick={() => {
+                                        cancelRecord({ patientId, doctorId });
+                                    }}
+                                >
+                                    Отменить запись
+                                </Button>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <Empty description="У вас ещё не одной записи" />
+                )}
+            </Container>
+        </div>
+    );
 };
 
-export default styled(memo(RecordsPage, () => true))``;
+export default styled(memo(RecordsPage, () => true))`
+    background-color: #fafafa;
+    padding-block-start: 40px;
+    padding-block-end: 40px;
+
+    .records-list {
+        margin-block-start: 40px;
+    }
+
+    .record {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-weight: 500;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 8px 4px rgba(34, 60, 80, 0.04);
+
+        &:not(:last-child()) {
+            margin-block-end: 20px;
+        }
+
+        button {
+            margin-block-start: 20px;
+        }
+    }
+`;

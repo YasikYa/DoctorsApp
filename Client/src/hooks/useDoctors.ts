@@ -5,8 +5,9 @@ import { fetchAllDoctors } from 'store/doctors/actions';
 export const useDoctors = () => {
     const dispatch = useDispatch();
 
-    const { loadedDoctors, doctors } = useSelector((state) => ({
+    const { loadedDoctors, doctors, doctorsById } = useSelector((state) => ({
         doctors: state.doctors.entities,
+        doctorsById: state.doctors.entitiesById,
         loadedDoctors: state.doctors.loadedDoctors,
     }));
 
@@ -18,5 +19,6 @@ export const useDoctors = () => {
 
     return {
         doctors,
+        doctorsById,
     };
 };

@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
+import { Doctor } from 'api/doctors/types';
 import { fetchAllDoctors, fetchCreateDoctor, fetchDeleteDoctor } from './actions';
 import { DoctorsState } from './types';
 
 const initialState: DoctorsState = {
     entities: [],
+    entitiesById: {},
     loadedDoctors: false,
 };
 
@@ -16,6 +18,14 @@ const doctorsSlice = createSlice({
         // fetch all
         builder.addCase(fetchAllDoctors.fulfilled, (state, { payload }) => {
             state.entities = payload;
+
+            state.entitiesById = payload.reduce(
+                (accumulator: { [doctorId: string]: Doctor }, currentValue) => {
+                    accumulator[currentValue.id] = currentValue;
+                    return accumulator;
+                },
+                {}
+            );
 
             state.loadedDoctors = true;
         });
